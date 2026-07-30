@@ -20,29 +20,47 @@ from accountsvc.core.config import Settings
 from accountsvc.main import create_app
 from accountsvc.models.user import User
 
-_env = dotenv_values(".env")
-_secrets = dotenv_values("secrets.env")
-_TEST_DATABASE_URL = (
-    f"postgresql+asyncpg://{_env['ACCOUNTSVC_DB_USER']}:{_secrets['ACCOUNTSVC_DB_PASSWORD']}"
-    f"@{_env['ACCOUNTSVC_DB_HOST']}/{_env['ACCOUNTSVC_DB_NAME']}"
-)
+
+def _load_env() -> tuple[dict[str, str | None], dict[str, str | None]]:
+    """Load ``.env`` and ``secrets.env`` and validate the required keys.
+
+    Called lazily from fixtures so that merely importing this module (e.g. during
+    pytest collection in environments without the env files) does not fail.
+    """
+    env = dotenv_values(".env")
+    secrets = dotenv_values("secrets.env")
+    required_env = ("ACCOUNTSVC_DB_USER", "ACCOUNTSVC_DB_HOST", "ACCOUNTSVC_DB_NAME")
+    required_secrets = ("ACCOUNTSVC_DB_PASSWORD",)
+    missing = [k for k in required_env if not env.get(k)] + [k for k in required_secrets if not secrets.get(k)]
+    if missing:
+        pytest.skip(
+            "Integration tests require the following variables in .env/secrets.env: " + ", ".join(missing),
+            allow_module_level=True,
+        )
+    return env, secrets
 
 
 @pytest.fixture
 def settings() -> Settings:
+    env, secrets = _load_env()
     return Settings(
         _env_file=None,  # pyright: ignore[reportCallIssue]
         environment="local",
-        db_host=_env["ACCOUNTSVC_DB_HOST"],
-        db_user=_env["ACCOUNTSVC_DB_USER"],
-        db_password=_secrets["ACCOUNTSVC_DB_PASSWORD"],
-        db_name=_env["ACCOUNTSVC_DB_NAME"],
+        db_host=env["ACCOUNTSVC_DB_HOST"],
+        db_user=env["ACCOUNTSVC_DB_USER"],
+        db_password=secrets["ACCOUNTSVC_DB_PASSWORD"],
+        db_name=env["ACCOUNTSVC_DB_NAME"],
     )
 
 
 @pytest_asyncio.fixture
 async def engine() -> AsyncIterator[AsyncEngine]:
-    engine = create_async_engine(_TEST_DATABASE_URL)
+    env, secrets = _load_env()
+    url = (
+        f"postgresql+asyncpg://{env['ACCOUNTSVC_DB_USER']}:{secrets['ACCOUNTSVC_DB_PASSWORD']}"
+        f"@{env['ACCOUNTSVC_DB_HOST']}/{env['ACCOUNTSVC_DB_NAME']}"
+    )
+    engine = create_async_engine(url)
     try:
         yield engine
     finally:
