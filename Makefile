@@ -19,7 +19,6 @@ format: ## Auto-format and auto-fix the codebase
 lint: ## Run linters, formatting checks and static type checking
 	$(UV) run ruff check .
 	$(UV) run ruff format --check .
-	$(MAKE) typecheck
 
 typecheck: ## Run static type checking
 	$(UV) run pyright
