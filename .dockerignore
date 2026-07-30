@@ -1,0 +1,30 @@
+# VCS / CI
+.git
+.gitignore
+.github
+
+# Local environments and secrets
+.env
+secrets.env
+.venv
+venv
+
+# Dev tooling / editor
+.devcontainer
+.vscode
+.pre-commit-config.yaml
+
+# Python caches / build artifacts
+**/__pycache__
+*.py[cod]
+.pytest_cache
+.ruff_cache
+.pyright
+.mypy_cache
+.coverage
+htmlcov
+dist
+build
+
+# Tests are not required in the runtime image
+tests

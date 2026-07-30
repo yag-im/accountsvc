@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.eggs/
+.venv/
+venv/
+dist/
+build/
+
+# Test / coverage / tooling caches
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.ruff_cache/
+.pyright/
+.mypy_cache/
+
+# Environment and secrets
+.env
+secrets.env
+
+# VS Code config provisioned locally from .devcontainer/vscode templates.
+# extensions.json stays committed so recommendations work outside the devcontainer.
+.vscode/settings.json
+.vscode/launch.json
+
+# OS / editor noise
+.DS_Store
+*.swp

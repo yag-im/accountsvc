@@ -1,0 +1,7 @@
+"""Request-scoped context propagated through :mod:`contextvars`."""
+
+from __future__ import annotations
+
+from contextvars import ContextVar
+
+request_id_ctx: ContextVar[str | None] = ContextVar("request_id", default=None)

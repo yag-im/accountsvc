@@ -1,0 +1,25 @@
+GET http://localhost:8080/users/0
+###
+
+PUT http://localhost:8080/users/0
+Content-Type: application/json
+
+{
+  "email": "robert@acme.im",
+  "name": "RA",
+  "tz": "UTC",
+  "apps_lib": {
+    "favorite_games": []
+  },
+  "dob": "1970-01-01",
+  "is_active": true
+}
+###
+
+PATCH http://localhost:8080/users/0
+Content-Type: application/json
+
+{
+  "name": "Ada, Countess of Lovelace"
+}
+###

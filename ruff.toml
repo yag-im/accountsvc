@@ -1,0 +1,51 @@
+target-version = "py313"
+line-length = 120
+src = ["src", "tests"]
+
+[lint]
+select = [
+    "A",     # flake8-builtins
+    "ASYNC", # flake8-async
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "DTZ",   # flake8-datetimez
+    "E",     # pycodestyle errors
+    "F",     # pyflakes
+    "I",     # isort
+    "N",     # pep8-naming
+    "PL",    # pylint
+    "RUF",   # ruff-specific
+    "S",     # flake8-bandit (security)
+    "SIM",   # flake8-simplify
+    "TID",   # flake8-tidy-imports
+    "UP",    # pyupgrade
+    "W",     # pycodestyle warnings
+]
+ignore = [
+    "PLR0913", # allow FastAPI dependency-injected handlers with several parameters
+]
+
+[lint.per-file-ignores]
+"tests/**" = [
+    "S101",    # asserts are expected in tests
+    "S105",    # test fixtures may use hardcoded credentials
+    "S106",    # test fixtures may use hardcoded credentials
+    "PLR2004", # magic values are acceptable in test assertions
+]
+
+[lint.isort]
+known-first-party = ["accountsvc"]
+
+[lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[lint.flake8-bugbear]
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.Query",
+    "fastapi.Path",
+    "fastapi.Header",
+]
+
+[format]
+docstring-code-format = true

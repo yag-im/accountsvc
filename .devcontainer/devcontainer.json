@@ -1,0 +1,44 @@
+{
+  "name": "accountsvc",
+  "image": "mcr.microsoft.com/devcontainers/python:3.13-trixie",
+  "features": {
+    // Debian 13 (trixie) has no moby-* packages, so install upstream Docker CE
+    // (moby=false). The CLI targets the host daemon via the auto-mounted socket.
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": false
+    }
+  },
+  "runArgs": [
+    "--add-host",
+    "sqldb.yag.dc:host-gateway",
+    "-p",
+    "8091:8080"
+  ],
+  "forwardPorts": [
+    8091
+  ],
+  "mounts": [
+    {
+      "source": "${localEnv:HOME}${localEnv:USERPROFILE}/.ssh",
+      "target": "/home/vscode/.ssh",
+      "type": "bind"
+    }
+  ],
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "charliermarsh.ruff",
+        "humao.rest-client",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker",
+        "tamasfe.even-better-toml"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python"
+      }
+    }
+  }
+}

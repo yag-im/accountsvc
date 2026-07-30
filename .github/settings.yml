@@ -1,0 +1,5 @@
+_extends: .github:settings.yml
+
+repository:
+  name: accountsvc
+  description: "Service managing user identities, profiles, and account lifecycle."
