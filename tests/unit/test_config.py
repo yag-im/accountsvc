@@ -11,7 +11,7 @@ _DB = {"db_host": "localhost", "db_user": "user", "db_password": "pass", "db_nam
 
 
 def test_missing_db_password_fails_fast(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("ACCOUNTSVC_DB_PASSWORD", raising=False)
+    monkeypatch.delenv("APP_DB_PASSWORD", raising=False)
     with pytest.raises(ValidationError):
         Settings(_env_file=None, db_host="h", db_user="u", db_name="d")  # pyright: ignore[reportCallIssue]
 

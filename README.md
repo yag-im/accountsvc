@@ -183,7 +183,7 @@ version is injected through the `APP_VERSION` build argument (which sets
 
 ```bash
 docker run --rm -p 8080:8080 \
-  -e ACCOUNTSVC_DATABASE_URL=postgresql+asyncpg://accountsvc:accountsvc@host.docker.internal:5432/accountsvc \
+  -e APP_DATABASE_URL=postgresql+asyncpg://accountsvc:accountsvc@host.docker.internal:5432/accountsvc \
   accountsvc:local
 curl http://localhost:8080/healthz
 ```
@@ -192,27 +192,27 @@ curl http://localhost:8080/healthz
 
 ## Configuration
 
-Configuration is provided by environment variables (prefix `ACCOUNTSVC_`) and, for
+Configuration is provided by environment variables (prefix `APP_`) and, for
 local development, the `.env` and `secrets.env` dotenv files. Settings are validated at
 startup by [src/accountsvc/core/config.py](src/accountsvc/core/config.py); an invalid or
 missing required value fails fast.
 
-| Variable                                     | Default        | Description                              |
-| -------------------------------------------- | -------------- | ---------------------------------------- |
-| `ACCOUNTSVC_ENVIRONMENT`                     | `local`        | `local`/`development`/`staging`/`production` |
-| `ACCOUNTSVC_DB_HOST`                         | _(required)_   | Database host                            |
-| `ACCOUNTSVC_DB_PORT`                         | `5432`         | Database port                            |
-| `ACCOUNTSVC_DB_USER`                         | _(required)_   | Database user (set in `.env`)            |
-| `ACCOUNTSVC_DB_PASSWORD`                     | _(required)_   | Database password (set in `secrets.env`) |
-| `ACCOUNTSVC_DB_NAME`                         | _(required)_   | Database name                            |
-| `ACCOUNTSVC_HOST`                            | `0.0.0.0`      | Bind address                             |
-| `ACCOUNTSVC_PORT`                            | `8080`         | Bind port                                |
-| `ACCOUNTSVC_LOG_LEVEL`                       | `INFO`         | Log level                                |
-| `ACCOUNTSVC_DEBUG`                           | `false`        | Enable SQL echo and verbose behaviour    |
-| `ACCOUNTSVC_DB_POOL_SIZE`                    | `5`            | Connection pool size                     |
-| `ACCOUNTSVC_DB_MAX_OVERFLOW`                 | `10`           | Pool overflow capacity                   |
-| `ACCOUNTSVC_DB_COMMAND_TIMEOUT_SECONDS`      | `30`           | Per-statement timeout                    |
-| `ACCOUNTSVC_GRACEFUL_SHUTDOWN_TIMEOUT_SECONDS` | `30`         | Graceful shutdown window                 |
+| Variable                              | Default        | Description                              |
+| ------------------------------------- | -------------- | ---------------------------------------- |
+| `APP_ENVIRONMENT`                     | `local`        | `local`/`development`/`staging`/`production` |
+| `APP_DB_HOST`                         | _(required)_   | Database host                            |
+| `APP_DB_PORT`                         | `5432`         | Database port                            |
+| `APP_DB_USER`                         | _(required)_   | Database user (set in `.env`)            |
+| `APP_DB_PASSWORD`                     | _(required)_   | Database password (set in `secrets.env`) |
+| `APP_DB_NAME`                         | _(required)_   | Database name                            |
+| `APP_HOST`                            | `0.0.0.0`      | Bind address                             |
+| `APP_PORT`                            | `8080`         | Bind port                                |
+| `APP_LOG_LEVEL`                       | `INFO`         | Log level                                |
+| `APP_DEBUG`                           | `false`        | Enable SQL echo and verbose behaviour    |
+| `APP_DB_POOL_SIZE`                    | `5`            | Connection pool size                     |
+| `APP_DB_MAX_OVERFLOW`                 | `10`           | Pool overflow capacity                   |
+| `APP_DB_COMMAND_TIMEOUT_SECONDS`      | `30`           | Per-statement timeout                    |
+| `APP_GRACEFUL_SHUTDOWN_TIMEOUT_SECONDS` | `30`         | Graceful shutdown window                 |
 
 ---
 
@@ -238,10 +238,10 @@ make audit                  # pip-audit against the locked dependency set
 - **Local:** both `.env` and `secrets.env` are git-ignored and must be created
   manually after cloning. See the [Configuration](#configuration) table for all
   supported variables. At minimum, `secrets.env` must define
-  `ACCOUNTSVC_DATABASE_URL` and `ACCOUNTSVC_TEST_DATABASE_URL`.
+  `APP_DATABASE_URL` and `APP_TEST_DATABASE_URL`.
 - **CI/CD:** GitHub Actions uses the built-in `GITHUB_TOKEN`; no long-lived secrets are
   stored for publishing to GHCR.
-- **Deployed environments:** `ACCOUNTSVC_DATABASE_URL` and any other secrets are
+- **Deployed environments:** `APP_DATABASE_URL` and any other secrets are
   injected by the platform's secret manager as environment variables. Secrets are never
   committed or baked into the image.
 

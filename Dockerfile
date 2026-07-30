@@ -58,8 +58,8 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:${PATH}" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    ACCOUNTSVC_HOST=0.0.0.0 \
-    ACCOUNTSVC_PORT=8080 \
+    APP_HOST=0.0.0.0 \
+    APP_PORT=8080 \
     OTEL_SERVICE_NAME=accountsvc
 
 EXPOSE 8080

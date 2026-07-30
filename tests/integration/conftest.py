@@ -29,8 +29,8 @@ def _load_env() -> tuple[dict[str, str | None], dict[str, str | None]]:
     """
     env = dotenv_values(".env")
     secrets = dotenv_values("secrets.env")
-    required_env = ("ACCOUNTSVC_DB_USER", "ACCOUNTSVC_DB_HOST", "ACCOUNTSVC_DB_NAME")
-    required_secrets = ("ACCOUNTSVC_DB_PASSWORD",)
+    required_env = ("APP_DB_USER", "APP_DB_HOST", "APP_DB_NAME")
+    required_secrets = ("APP_DB_PASSWORD",)
     missing = [k for k in required_env if not env.get(k)] + [k for k in required_secrets if not secrets.get(k)]
     if missing:
         pytest.skip(
@@ -46,10 +46,10 @@ def settings() -> Settings:
     return Settings(
         _env_file=None,  # pyright: ignore[reportCallIssue]
         environment="local",
-        db_host=env["ACCOUNTSVC_DB_HOST"],
-        db_user=env["ACCOUNTSVC_DB_USER"],
-        db_password=secrets["ACCOUNTSVC_DB_PASSWORD"],
-        db_name=env["ACCOUNTSVC_DB_NAME"],
+        db_host=env["APP_DB_HOST"],
+        db_user=env["APP_DB_USER"],
+        db_password=secrets["APP_DB_PASSWORD"],
+        db_name=env["APP_DB_NAME"],
     )
 
 
@@ -57,8 +57,8 @@ def settings() -> Settings:
 async def engine() -> AsyncIterator[AsyncEngine]:
     env, secrets = _load_env()
     url = (
-        f"postgresql+asyncpg://{env['ACCOUNTSVC_DB_USER']}:{secrets['ACCOUNTSVC_DB_PASSWORD']}"
-        f"@{env['ACCOUNTSVC_DB_HOST']}/{env['ACCOUNTSVC_DB_NAME']}"
+        f"postgresql+asyncpg://{env['APP_DB_USER']}:{secrets['APP_DB_PASSWORD']}"
+        f"@{env['APP_DB_HOST']}/{env['APP_DB_NAME']}"
     )
     engine = create_async_engine(url)
     try:
