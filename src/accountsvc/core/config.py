@@ -9,7 +9,7 @@ from urllib.parse import quote
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-Environment = Literal["local", "development", "staging", "production"]
+Environment = Literal["local", "dev", "stage", "prod"]
 
 _VALID_LOG_LEVELS = frozenset({"CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG", "NOTSET"})
 

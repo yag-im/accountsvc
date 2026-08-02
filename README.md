@@ -199,7 +199,7 @@ missing required value fails fast.
 
 | Variable                              | Default        | Description                              |
 | ------------------------------------- | -------------- | ---------------------------------------- |
-| `APP_ENVIRONMENT`                     | `local`        | `local`/`development`/`staging`/`production` |
+| `APP_ENVIRONMENT`                     | `local`        | `local`/`dev`/`stage`/`prod`             |
 | `APP_DB_HOST`                         | _(required)_   | Database host                            |
 | `APP_DB_PORT`                         | `5432`         | Database port                            |
 | `APP_DB_USER`                         | _(required)_   | Database user (set in `.env`)            |
