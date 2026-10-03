@@ -50,6 +50,15 @@ LABEL org.opencontainers.image.title="accountsvc" \
     org.opencontainers.image.licenses="GPL-3.0-or-later" \
     org.opencontainers.image.source="https://github.com/yag-im/accountsvc"
 
+RUN apt-get update \
+    && apt-get upgrade --yes --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+# Package installation happens in the builder; pip's vendored dependencies
+# and ensurepip's bundled installer are unnecessary in the runtime image.
+RUN python -m pip uninstall --yes pip \
+    && rm -f /usr/local/lib/python*/ensurepip/_bundled/pip-*.whl
+
 RUN groupadd --system --gid 1001 app \
     && useradd --system --uid 1001 --gid app --no-create-home --shell /usr/sbin/nologin app
 

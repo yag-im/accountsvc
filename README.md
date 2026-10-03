@@ -172,12 +172,25 @@ uv run pyright
 
 The [Dockerfile](Dockerfile) is a multi-stage build producing a minimal image that
 runs as a non-root user (`uid 1001`) and binds unprivileged port `8080`.
+The runtime stage applies available Debian updates and removes global pip and
+its bundled installer wheel; application dependencies are installed in the builder.
 
 ```bash
 make docker-build
 # or, directly:
-docker build --build-arg APP_VERSION=0.1.0 -t accountsvc:local .
+docker build --pull --build-arg APP_VERSION=0.1.0 -t accountsvc:local .
 ```
+
+To reproduce the CI vulnerability gate locally with Trivy:
+
+```bash
+trivy image --scanners vuln --severity HIGH,CRITICAL \
+  --ignore-unfixed --exit-code 1 accountsvc:local
+```
+
+Omit `--ignore-unfixed` to also report vulnerabilities with no published fix.
+Rebuild with `--pull --no-cache` when checking for newly available base-image
+and Debian updates; cached build layers do not rerun package updates.
 
 Because the version is derived from git tags at build time (see
 [versioning](#versioning-and-release-flow)) and the build context excludes `.git`, the
