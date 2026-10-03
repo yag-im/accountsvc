@@ -57,7 +57,7 @@ def settings() -> Settings:
 async def engine() -> AsyncIterator[AsyncEngine]:
     env, secrets = _load_env()
     url = (
-        f"postgresql+asyncpg://{env['APP_DB_USER']}:{secrets['APP_DB_PASSWORD']}"
+        f"postgresql+psycopg://{env['APP_DB_USER']}:{secrets['APP_DB_PASSWORD']}"
         f"@{env['APP_DB_HOST']}/{env['APP_DB_NAME']}"
     )
     engine = create_async_engine(url)

@@ -1,6 +1,6 @@
 {
   "name": "accountsvc",
-  "image": "mcr.microsoft.com/devcontainers/python:3.13-trixie",
+  "image": "mcr.microsoft.com/devcontainers/python:3.14-trixie",
   "features": {
     // Debian 13 (trixie) has no moby-* packages, so install upstream Docker CE
     // (moby=false). The CLI targets the host daemon via the auto-mounted socket.

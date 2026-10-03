@@ -51,7 +51,7 @@ Key design decisions:
 - **Dependency injection.** The persistence and service layers are wired together with
   FastAPI `Depends`, exposed as `Annotated` type aliases in
   [src/accountsvc/api/dependencies.py](src/accountsvc/api/dependencies.py).
-- **Async everywhere.** SQLAlchemy 2.0 async engine with `asyncpg`, async sessions,
+- **Async everywhere.** SQLAlchemy 2.0 async engine with `psycopg` 3, async sessions,
   and async request handlers.
 - **RFC 9457 errors.** All failures are serialized as `application/problem+json` via
   centralized exception handlers in [src/accountsvc/api/errors.py](src/accountsvc/api/errors.py).
@@ -76,7 +76,7 @@ Key design decisions:
 ## Project bootstrap
 
 Requirements: [uv](https://docs.astral.sh/uv/) `0.11.32+`. uv provisions the correct
-Python interpreter (3.13) automatically — no system Python setup is required.
+Python interpreter (3.14) automatically — no system Python setup is required.
 
 ```bash
 make bootstrap
@@ -143,6 +143,9 @@ mode, so async tests need no decorator.
 
 Linting and formatting are handled by [Ruff](https://docs.astral.sh/ruff/), configured
 in [ruff.toml](ruff.toml) (single source of truth).
+Ruff 0.16.0 or newer is required for the Python 3.14 target. Keep the
+Ruff hook revision in [.pre-commit-config.yaml](.pre-commit-config.yaml)
+aligned with the version in [uv.lock](uv.lock).
 
 ```bash
 make lint     # ruff check . && ruff format --check .
@@ -183,7 +186,7 @@ version is injected through the `APP_VERSION` build argument (which sets
 
 ```bash
 docker run --rm -p 8080:8080 \
-  -e APP_DATABASE_URL=postgresql+asyncpg://accountsvc:accountsvc@host.docker.internal:5432/accountsvc \
+  -e APP_DATABASE_URL=postgresql+psycopg://accountsvc:accountsvc@host.docker.internal:5432/accountsvc \
   accountsvc:local
 curl http://localhost:8080/healthz
 ```
@@ -254,7 +257,7 @@ make audit                  # pip-audit against the locked dependency set
 - **Request correlation.** `RequestContextMiddleware` honours or generates an
   `X-Request-ID` header and echoes it back on every response.
 - **Tracing & metrics.** The container entrypoint is `opentelemetry-instrument`, which
-  auto-instruments FastAPI, asyncpg, and SQLAlchemy with zero code changes. Configure
+  auto-instruments FastAPI, psycopg, and SQLAlchemy with zero code changes. Configure
   the collector via standard OTel environment variables, for example:
 
   ```bash
@@ -282,7 +285,7 @@ from [Conventional Commits](https://www.conventionalcommits.org/).
   attestations and scanned with Trivy.
 
 Every push and pull request additionally runs the [CI workflow](.github/workflows/ci.yml)
-(lint, type check, tests on Python 3.13, container build, and image scan).
+(lint, type check, tests on Python 3.14, container build, and image scan).
 
 ---
 

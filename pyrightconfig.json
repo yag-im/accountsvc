@@ -1,9 +1,18 @@
 {
-  "include": ["src", "tests"],
-  "exclude": ["**/__pycache__", "**/.venv", ".venv", "dist", "build"],
+  "include": [
+    "src",
+    "tests"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "**/.venv",
+    ".venv",
+    "dist",
+    "build"
+  ],
   "venvPath": ".",
   "venv": ".venv",
-  "pythonVersion": "3.13",
+  "pythonVersion": "3.14",
   "pythonPlatform": "Linux",
   "typeCheckingMode": "standard",
   "reportMissingImports": true,

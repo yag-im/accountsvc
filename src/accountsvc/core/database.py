@@ -24,11 +24,10 @@ def create_engine(settings: Settings) -> AsyncEngine:
         pool_pre_ping=True,
         echo=False,
         connect_args={
-            "command_timeout": settings.db_command_timeout_seconds,
-            "server_settings": {
-                "application_name": settings.service_name,
-                "statement_timeout": statement_timeout_ms,
-            },
+            "application_name": settings.service_name,
+            "connect_timeout": int(settings.db_pool_timeout_seconds),
+            # libpq has no client-side query timeout; enforce it server-side.
+            "options": f"-c statement_timeout={statement_timeout_ms}",
         },
     )
 

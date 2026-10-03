@@ -64,7 +64,7 @@ class Settings(BaseSettings):
     def sqlalchemy_dsn(self) -> str:
         """Return the database URL as a string suitable for SQLAlchemy."""
         password = quote(self.db_password, safe="")
-        return f"postgresql+asyncpg://{self.db_user}:{password}@{self.db_host}:{self.db_port}/{self.db_name}"
+        return f"postgresql+psycopg://{self.db_user}:{password}@{self.db_host}:{self.db_port}/{self.db_name}"
 
 
 @lru_cache(maxsize=1)

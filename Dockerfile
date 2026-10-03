@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.9
 
-ARG PYTHON_VERSION=3.13
+ARG PYTHON_VERSION=3.14
 
 ##########################################################################
 # Builder: resolve and install dependencies, then the project itself.

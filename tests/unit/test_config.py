@@ -28,4 +28,4 @@ def test_invalid_log_level_rejected() -> None:
 
 def test_sqlalchemy_dsn_is_string() -> None:
     settings = Settings(_env_file=None, **_DB)  # pyright: ignore[reportCallIssue]
-    assert settings.sqlalchemy_dsn.startswith("postgresql+asyncpg://")
+    assert settings.sqlalchemy_dsn.startswith("postgresql+psycopg://")
