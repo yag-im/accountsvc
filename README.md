@@ -228,6 +228,7 @@ missing required value fails fast.
 | `APP_DB_POOL_SIZE`                    | `5`            | Connection pool size                     |
 | `APP_DB_MAX_OVERFLOW`                 | `10`           | Pool overflow capacity                   |
 | `APP_DB_COMMAND_TIMEOUT_SECONDS`      | `30`           | Per-statement timeout                    |
+| `APP_SQLDB_ENGINE_OPTIONS`            | `{}`           | JSON object of extra `create_async_engine` kwargs; overrides the `APP_DB_POOL_*`/`APP_DB_MAX_OVERFLOW` values, e.g. `{"pool_size": 2, "pool_recycle": 120}` |
 | `APP_GRACEFUL_SHUTDOWN_TIMEOUT_SECONDS` | `30`         | Graceful shutdown window                 |
 
 ---

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Literal
+from typing import Any, Literal
 from urllib.parse import quote
 
 from pydantic import Field, field_validator
@@ -48,6 +48,9 @@ class Settings(BaseSettings):
     db_pool_timeout_seconds: float = Field(default=30.0, gt=0)
     db_pool_recycle_seconds: int = Field(default=1800, gt=0)
     db_command_timeout_seconds: float = Field(default=30.0, gt=0)
+    # Extra keyword arguments for create_async_engine, supplied as a JSON object.
+    # Keys override the engine arguments derived from the db_* settings above.
+    sqldb_engine_options: dict[str, Any] = Field(default_factory=dict)
 
     graceful_shutdown_timeout_seconds: int = Field(default=30, ge=0)
 

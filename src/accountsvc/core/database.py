@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -13,23 +15,28 @@ from accountsvc.core.config import Settings
 
 
 def create_engine(settings: Settings) -> AsyncEngine:
-    """Create the async SQLAlchemy engine with pooling and query timeouts."""
+    """Create the async SQLAlchemy engine with pooling and query timeouts.
+
+    ``settings.sqldb_engine_options`` is applied on top of the defaults derived from the
+    ``db_*`` settings, so any engine keyword argument can be overridden from configuration.
+    """
     statement_timeout_ms = str(int(settings.db_command_timeout_seconds * 1000))
-    return create_async_engine(
-        settings.sqlalchemy_dsn,
-        pool_size=settings.db_pool_size,
-        max_overflow=settings.db_max_overflow,
-        pool_timeout=settings.db_pool_timeout_seconds,
-        pool_recycle=settings.db_pool_recycle_seconds,
-        pool_pre_ping=True,
-        echo=False,
-        connect_args={
+    engine_kwargs: dict[str, Any] = {
+        "pool_size": settings.db_pool_size,
+        "max_overflow": settings.db_max_overflow,
+        "pool_timeout": settings.db_pool_timeout_seconds,
+        "pool_recycle": settings.db_pool_recycle_seconds,
+        "pool_pre_ping": True,
+        "echo": False,
+        "connect_args": {
             "application_name": settings.service_name,
             "connect_timeout": int(settings.db_pool_timeout_seconds),
             # libpq has no client-side query timeout; enforce it server-side.
             "options": f"-c statement_timeout={statement_timeout_ms}",
         },
-    )
+    }
+    engine_kwargs.update(settings.sqldb_engine_options)
+    return create_async_engine(settings.sqlalchemy_dsn, **engine_kwargs)
 
 
 def create_session_factory(engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
